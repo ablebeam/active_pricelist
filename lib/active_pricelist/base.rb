@@ -48,11 +48,15 @@ module ActivePricelist
     def parse
       price_list = ActivePricelist::Reader.new(reader_settings)
       price_list.parse!
+      GC.enable
+      GC.start
       price_list.rows.each do |row|
         @product = row
         transform
         products << @product if valid_product?
       end
+      GC.enable
+      GC.start
     end
 
     def check_settings
@@ -81,7 +85,7 @@ module ActivePricelist
     end
 
     def valid_product?
-      !@required.any? { |k| @product[k].blank? }
+      !@required.any? { |k| @product[k].blank? } and @product['price'].present? and @product['price'].to_i > 0
     end
 
   end
