@@ -52,6 +52,10 @@ module ActivePricelist
       GC.start
       price_list.rows.each do |row|
         @product = row
+        if @product['code'].kind_of?(Float) 
+          @product['code'] = @product['code'].to_i.to_s
+        end
+        
         transform
         products << @product if valid_product?
       end
