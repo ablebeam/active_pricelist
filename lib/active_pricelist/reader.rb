@@ -65,9 +65,9 @@ module ActivePricelist
     def parse_as_xlsx
       wb    = Dullard::Workbook.new(@file)
       rows  = wb.sheets.first.rows.to_a
-      @start.to_i.upto(rows.count) do |row|
+      @start.to_i.upto(rows.count) do |row_num|
         obj = {}
-        @columns.each { |k, v| obj[k] = row[v.to_i - 1].to_s }
+        @columns.each { |k, v| obj[k] = rows[row_num - 1][v.to_i - 1].to_s }
         @rows << obj
       end
     end
